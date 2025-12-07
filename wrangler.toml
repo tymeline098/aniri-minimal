@@ -1,0 +1,12 @@
+# Cloudflare Pages Deployment Configuration
+# for aniri.tymelinestudios.com
+
+name = "aniri-minimal"
+type = "javascript"
+command = "npm run build"
+dir = ".next"
+
+[env]
+# Production environment
+[env.production]
+vars = { NODE_VERSION = "18" }
