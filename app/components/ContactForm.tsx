@@ -11,6 +11,8 @@ export default function ContactForm() {
     message: '',
   })
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -20,14 +22,34 @@ export default function ContactForm() {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
-    setSubmitted(true)
-    setTimeout(() => {
+    setLoading(true)
+    setError('')
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to send message')
+      }
+
+      setSubmitted(true)
       setFormData({ name: '', email: '', subject: '', message: '' })
-      setSubmitted(false)
-    }, 3000)
+      setTimeout(() => {
+        setSubmitted(false)
+      }, 3000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to send message')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -35,6 +57,12 @@ export default function ContactForm() {
       {submitted && (
         <div className="mb-6 p-4 bg-gray-100 border border-gray-300 rounded-lg text-center text-black">
           ✓ Thank you! I'll get back to you soon.
+        </div>
+      )}
+      
+      {error && (
+        <div className="mb-6 p-4 bg-red-100 border border-red-300 rounded-lg text-center text-red-700">
+          {error}
         </div>
       )}
       
@@ -106,10 +134,11 @@ export default function ContactForm() {
 
         <button
           type="submit"
-          className="w-full btn-primary flex items-center justify-center gap-2 py-4"
+          disabled={loading}
+          className="w-full btn-primary flex items-center justify-center gap-2 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Send size={20} />
-          Send Message
+          {loading ? 'Sending...' : 'Send Message'}
         </button>
       </form>
     </div>
