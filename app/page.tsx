@@ -32,14 +32,13 @@ export default function HomePage() {
         ref={heroRef}
         className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-white"
       >
-        <div 
-          className="absolute inset-0 bg-white flex items-center justify-center bg-cover md:bg-contain bg-center bg-no-repeat"
-          style={{
-            backgroundImage: 'url(/images/hero-peacock.webp)',
-          }}
-        >
-          <div className="absolute inset-0 bg-black/20" />
-        </div>
+        <img 
+          src="/images/hero-peacock.webp"
+          alt="Hero Peacock"
+          className="absolute inset-0 w-full h-full object-cover md:object-contain md:object-center"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-black/20" />
         
         <motion.div
           style={{ opacity: heroOpacity, y: heroY }}
