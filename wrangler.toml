@@ -1,12 +1,9 @@
-# Cloudflare Pages Deployment Configuration
-# for aniri.tymelinestudios.com
+name = "aniri-prod"
+account_id = "1bb75723604137a1707a9b97801a92e5"
+main = "_worker.js"
+compatibility_date = "2024-01-01"
 
-name = "aniri-minimal"
-type = "javascript"
-command = "npm run build"
-dir = ".next"
-
-[env]
-# Production environment
 [env.production]
-vars = { NODE_VERSION = "18" }
+routes = [
+  { pattern = "aniri.tymelinestudios.com/*", zone_name = "tymelinestudios.com" }
+]
